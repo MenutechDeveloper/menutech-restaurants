@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vista de PDFs</title>
+  <style>
+    body {
+      margin: auto;
+      height: 100%;
+      width: 100%;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center; /* ✅ Centrado vertical */
+      height: 100vh; /* ✅ Ocupa toda la pantalla */
+      overflow: hidden; 
+      
+      padding: 40px 0;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      width: 90%;
+      max-width: 1200px;
+      padding: 0 20px;
+    }
+
+    .pdf-card {
+      background: #2a2a2a;
+      border-radius: 18px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .pdf-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 18px rgba(0, 188, 212, 0.4);
+    }
+
+    /* Vista previa del PDF */
+    .pdf-preview {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border: none;
+      background: #111;
+      display: block;
+    }
+
+    /* Capa invisible para clic */
+    .click-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 55px);
+      z-index: 2;
+      cursor: pointer;
+    }
+
+    .pdf-info {
+      padding: 14px 10px;
+      text-align: center;
+      background: #242424;
+      color: #00bcd4;
+      font-weight: 500;
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+      z-index: 1;
+      position: relative;
+      user-select: none;
+    }
+
+    /* Hover sutil en el título */
+    .pdf-card:hover .pdf-info {
+      color: #4dd0e1;
+    }
+
+    @media (max-width: 800px) {
+      .container {
+        gap: 20px;
+      }
+      .pdf-info {
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .pdf-preview {
+        aspect-ratio: 2 / 3;
+      }
+    }
+  </style>
+</head>
+<body>
+  <menutech-themes></menutech-themes>
+
+  <div class="container">
+    <div class="pdf-card" onclick="window.open('https://menutechdeveloper.github.io/databasewindows/pdf/Tragalero Form.pdf', '_blank')">
+      <div class="click-layer"></div>
+      <iframe class="pdf-preview" src="https://menutechdeveloper.github.io/databasewindows/pdf/Tragalero Form.pdf"></iframe>
+      <div class="pdf-info">Tragalero Form</div>
+    </div>
+
+    <div class="pdf-card" onclick="window.open('https://menutechdeveloper.github.io/databasewindows/pdf/Wisbe Form clean.pdf', '_blank')">
+      <div class="click-layer"></div>
+      <iframe class="pdf-preview" src="https://menutechdeveloper.github.io/databasewindows/pdf/Wisbe Form clean.pdf"></iframe>
+      <div class="pdf-info">Wisbe Form</div>
+    </div>
+
+    <div class="pdf-card" onclick="window.open('https://menutechdeveloper.github.io/databasewindows/pdf/Tragalero Form.pdf', '_blank')">
+      <div class="click-layer"></div>
+      <iframe class="pdf-preview" src="https://menutechdeveloper.github.io/databasewindows/pdf/Tragalero Form.pdf"></iframe>
+      <div class="pdf-info">Menutech Form</div>
+    </div>
+  </div>
+
+  <script src="https://menutech.xyz/menutechUI.min.js"></script>
+</body>
+</html>
