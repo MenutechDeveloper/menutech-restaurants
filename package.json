@@ -1,41 +1,49 @@
 {
   "name": "paralax",
-  "version": "1.0.0",
+  "version": "1.0.2",
+  "description": "Menutech local restaurant directory",
   "main": "main.js",
   "scripts": {
-    "start": "live-server",
-    "electron": "electron .",
+    "start": "electron .",
     "build": "electron-builder"
   },
   "build": {
     "appId": "com.menutech.paralax",
-    "productName": "menutech",
+    "productName": "Menutech",
     "directories": {
       "buildResources": "build"
     },
     "publish": [
-  {
-    "provider": "github",
-    "owner": "MenutechDeveloper",
-    "repo": "menutech-restaurants"
-  }
-],
+      {
+        "provider": "github",
+        "owner": "MenutechDeveloper",
+        "repo": "menutech-restaurants"
+      }
+    ],
     "files": [
       "index.html",
-      "cities.html",
-      "city.html",
+      "directory.html",
+      "forms.html",
       "assets/**/*",
       "main.js"
     ],
     "win": {
       "target": "nsis",
       "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerSidebar": "build/installerSidebar.bmp",
+      "installerHeader": "build/installerHeader.bmp",
+      "uninstallerSidebar": "build/installerSidebar.bmp",
+      "deleteAppDataOnUninstall": false,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico"
     }
   },
-  "keywords": [],
-  "author": "",
+  "author": "Menutech Developer",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "electron": "^39.1.1",
     "electron-builder": "^26.0.12"
