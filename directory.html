@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Menutech Restaurant Directory</title>
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/Diseño%20sin%20título%20(8).png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/Diseño%20sin%20título%20(8).png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/Diseño%20sin%20título%20(8).png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/Diseño%20sin%20título%20(8).png" media="(prefers-color-scheme: dark)">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/Diseño%20sin%20título%20(8).png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/Diseño%20sin%20título%20(8).png">
+    <link rel="icon" type="image/png" sizes="500x500" href="./assets/img/mks%20(9).png">
+<style>
+  :root{
+    --gap: 16px;
+    --card-radius: 8px;
+    --modal-bg: rgba(0,0,0,0.6);
+    --modal-max-width: 900px;
+    --modal-padding: 18px;
+    --modal-height: 70vh;
+    --thumbnail-size: 64px;
+  }
+
+  body{
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    margin: 0;
+     background: #1e1e1e;
+    color: #111827;
+    padding: 28px;
+    box-sizing: border-box;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1{ margin:0 0 12px 0; }
+  p.desc{ margin:0 0 18px 0; color:#6b7280; }
+
+  /* --- Barra de búsqueda --- */
+  .search-area{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom: 26px;
+  }
+  .search-area input{
+  background: #2c2c2c;
+  color: #fff;
+    width:100%;
+    max-width:500px;
+    padding:12px 16px;
+    border-radius:8px;
+    border:1px solid #d1d5db;
+    font-size:15px;
+  }
+
+  /* --- Grid --- */
+  .grid-container{
+    max-width:1200px;
+    margin:0 auto;
+    flex:1;
+    overflow-y:auto;
+    padding-right:6px;
+    scrollbar-width: none; /* Firefox */
+  }
+  .grid-container::-webkit-scrollbar{
+    display:none;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--gap);
+  }
+
+  .card{
+    background:white;
+    border-radius: var(--card-radius);
+    overflow:hidden;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+  }
+
+  .card .img-wrap{
+    width:100%;
+    aspect-ratio: 4 / 3;
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition: transform .35s ease;
+    border-radius:8px;
+  }
+  .card .img-wrap:hover img{ transform: scale(1.03); }
+
+  .card .meta{
+    padding:10px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+  }
+
+  .meta .left{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .meta .name{ font-weight:700; }
+  .meta .city{ font-size:13px; color:#6b7280; }
+  .meta .zip{ font-size:13px; color:#9ca3af; }
+
+  /* --- Modal --- */
+  .modal-backdrop{
+    position:fixed;
+    inset:0;
+    background: var(--modal-bg);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1200;
+    padding:20px;
+  }
+  .modal-backdrop.open{ display:flex; }
+
+  .modal {
+    width: calc(100% - 40px);
+    max-width: var(--modal-max-width);
+    background: #fff;
+    border-radius: 12px;
+    padding: var(--modal-padding);
+    box-shadow: 0 20px 50px rgba(2,6,23,0.45);
+    position:relative;
+    max-height: calc(var(--modal-height) + 40px);
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    box-sizing:border-box;
+  }
+
+  .modal .close-btn{
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:transparent;
+    border:0;
+    font-size:20px;
+    cursor:pointer;
+  }
+
+  .viewer{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .viewer .main{
+    flex:1 1 60%;
+    min-width:0;
+    border-radius:8px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+  }
+  .viewer .main img,
+  .viewer .main video{
+    width:100%;
+    height:auto;
+    max-height: calc(var(--modal-height) - 200px);
+    object-fit:contain;
+    border-radius:8px;
+    background:#f3f4f6;
+    cursor:pointer;
+  }
+
+  .viewer .side{
+    width: 140px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .thumbs{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    overflow:auto;
+  }
+  .thumbs img{
+    width:100%;
+    height:var(--thumbnail-size);
+    object-fit:cover;
+    border-radius:6px;
+    cursor:pointer;
+    border:2px solid transparent;
+  }
+  .thumbs img.active{ border-color:#2563eb; }
+  .thumbs::-webkit-scrollbar{ display:none; }
+
+  .nav-arrows{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    margin-top:8px;
+  }
+  .nav-arrows button{
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #e5e7eb;
+    background:white;
+    cursor:pointer;
+    font-weight:700;
+  }
+
+  @media (max-width: 1200px){
+    :root{ --modal-max-width: 780px; }
+  }
+  .bottom-bar {
+  backdrop-filter: blur(10px);
+  background: rgba(17, 24, 39, 0.8);
+}
+
+
+  .bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #111827;
+  color: white;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+.nav-btn {
+  background: #1f2937;
+  border: none;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.nav-btn:hover {
+  background: #374151;
+}
+
+</style>
+</head>
+<body>
+<menutech-themes></menutech-themes>
+<menutech-chatbot></menutech-chatbot>
+<h1></h1>
+<p class="desc"></br></br></br></p>
+
+<div class="search-area">
+  <input id="unifiedSearch" type="search" placeholder="Buscar por ciudad, zipcode o nombre...">
+</div>
+
+<div class="grid-container">
+  <main class="grid" id="directoryGrid"></main>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <button class="close-btn" id="modalClose">✕</button>
+    <h2 id="modalTitle" style="margin:0; font-size:18px;"></h2>
+    <div id="modalSub" style="font-size:13px; color:#6b7280;"></div>
+    <div class="viewer">
+      <div class="main" id="mainViewer">
+        <img id="modalMainImage" src="" alt="Imagen principal">
+        <div class="nav-arrows">
+          <button id="prevImage">◀</button>
+          <button id="nextImage">▶</button>
+        </div>
+      </div>
+      <div class="side">
+        <div class="thumbs" id="modalThumbs"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="bottom-bar">
+  <button class="nav-btn" id="btn-back">⟵ Atrás</button>
+  <button class="nav-btn" id="btn-home">🏠 Inicio</button>
+  <button class="nav-btn" id="btn-refresh">⟳ Actualizar</button>
+</footer>
+
+<script>
+const restaurants = [
+      {name:"La Carreta",city:"7721 Almeda Genoa Rd suit c, Houston, TX 77075",zip:"",imgs:[
+    {type:"image",src:"https://menutechdeveloper.github.io/databasewindows/img/carretalogo.png"},
+    {type:"video",src:"#",poster:"https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=1600&q=60",link:"https://lacarretarest.com/"},
+    {type:"image",src:"https://menutechdeveloper.github.io/databasewindows/img/carretaGB.jpg",link:"https://share.google/USrnxuQIoedAaAHv6"}
+  ]},
+  {name:"La Salsita Pinchi",city:"8761 W University Blvd, Odessa, TX 79764, USA",zip:"",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/logosalsa.png",
+    {type:"image",src:"https://menutechdeveloper.github.io/databasewindows/img/salsitaGB.jpg",link:"https://share.google/swaYGA6u8mkjLHzNL"}
+  ]},
+  {name:"Rehobot Reception Hall",city:"1626 Federal Rd, Houston, TX 77015",zip:"",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/rehobotlogo.png",
+    {type:"image",src:"https://menutechdeveloper.github.io/databasewindows/img/rehobotGB.jpg",link:"https://share.google/hxkR9bqPqyn4xRPLD"}
+
+  ]},
+  {name:"Tacos Brothers",city:"330 Heberton Ave Staten Island, NY 10302",zip:"",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/tacosbrotherslogo.png",
+    {type:"image",src:"https://menutechdeveloper.github.io/databasewindows/img/tacosbrotherGB.jpg",link:"https://share.google/lCqcYUAN0wYxFruGm"}
+
+  ]},
+  {name:"Canadia Pizza",city:"New York",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/canadianlogo.png",
+        {type:"image",src:"https://menutechdeveloper.github.io/databasewindows/img/canadianpizzaGB.jpg",link:"https://share.google/A8PhR9I8ExbbwBn1P"}
+
+  ]},
+  {name:"El Herradero", city:"1598 Covington Ave, Piqua, OH 45356,",zip:"1228 OH-29, Urbana, OH 43078",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/herraderologo.png",
+            {type:"image",src:"https://menutechdeveloper.github.io/databasewindows/img/herraderoGB1.jpg",link:"https://share.google/qw7lirynWKHAZUNRM"},
+                    {type:"image",src:"https://menutechdeveloper.github.io/databasewindows/img/herraderoGB2.jpg",link:"https://share.google/xg6dH0U5KcLscpUnh"}
+
+
+  ]},
+  {name:"Rumi",city:"Seattle",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",  ]},
+  {name:"Zora",city:"Boston",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Kira",city:"San Diego",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Mira",city:"Orlando",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Vivo",city:"Denver",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Aqua",city:"Portland",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Bora",city:"Atlanta",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Nina",city:"Austin",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Oni",city:"Phoenix",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Roka",city:"Philadelphia",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Zumi",city:"San Jose",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Tori",city:"Las Vegas",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Yuki",city:"Salt Lake City",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Neko",city:"San Francisco",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Moro",city:"New Orleans",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Vana",city:"Tampa",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Lira",city:"Kansas City",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Riko",city:"Detroit",zip:"00000",imgs:[
+    "https://menutechdeveloper.github.io/databasewindows/img/",
+  ]},
+  {name:"Suki",city:"San Antonio",zip:"00000",imgs:[
+    "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1600&q=60"
+  ]},
+  {name:"Mika",city:"Columbus",zip:"00000",imgs:[
+    "https://images.unsplash.com/photo-1575936123452-b67c3203c357?w=1600&q=60"
+  ]},
+  {name:"Hana",city:"Charlotte",zip:"00000",imgs:[
+    "https://images.unsplash.com/photo-1526318472351-c75fcf0703f6?w=1600&q=60"
+  ]}
+];
+
+// --- Lógica idéntica, no modificada ---
+const grid = document.getElementById('directoryGrid');
+const unifiedSearch = document.getElementById('unifiedSearch');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalClose = document.getElementById('modalClose');
+let modalMainImage = document.getElementById('modalMainImage');
+const modalThumbs = document.getElementById('modalThumbs');
+const modalTitle = document.getElementById('modalTitle');
+const modalSub = document.getElementById('modalSub');
+const prevImageBtn = document.getElementById('prevImage');
+const nextImageBtn = document.getElementById('nextImage');
+let currentGallery = [];
+let currentIndex = 0;
+
+function createCard(item){
+  const card = document.createElement('article');
+  card.className = 'card';
+  const first = typeof item.imgs[0] === 'string' ? item.imgs[0] : item.imgs[0].src;
+  card.innerHTML = `
+    <div class="img-wrap"><img src="${first}" alt="${item.name}"></div>
+    <div class="meta"><div class="left"><div class="name">${item.name}</div><div class="city">${item.city}</div></div><div class="zip">${item.zip}</div></div>`;
+  card.querySelector('.img-wrap').addEventListener('click',()=>openModal(item));
+  return card;
+}
+
+function renderGrid(data){
+  grid.innerHTML='';
+  data.forEach(r=>grid.appendChild(createCard(r)));
+}
+
+function openModal(item){
+  modalTitle.textContent = item.name;
+  modalSub.textContent = `${item.city} — ${item.zip}`;
+  modalThumbs.innerHTML = '';
+  currentGallery = item.imgs;
+  currentGallery.forEach((media,i)=>{
+    const src = typeof media === 'string'?media:media.src;
+    const thumb=document.createElement('img');
+    if (typeof media === 'object' && media.type === 'video' && media.poster) {
+    thumb.src = media.poster; // 👈 usa la imagen del poster como miniatura
+    } else {
+    thumb.src = src; // imagen normal
+    }
+    thumb.addEventListener('click',()=>selectImage(i));
+    modalThumbs.appendChild(thumb);
+  });
+  currentIndex=0;
+  selectImage(0);
+  modalBackdrop.classList.add('open');
+}
+
+function selectImage(index){
+  const media = currentGallery[index];
+  const src = typeof media === 'string'?media:media.src;
+  const mainViewer = document.getElementById('mainViewer');
+  mainViewer.querySelector('#modalMainImage')?.remove();
+
+  let element;
+  if(typeof media==='object' && media.type==='video'){
+    element=document.createElement('video');
+    element.controls=true;
+    element.autoplay=true;
+    element.muted=true;
+  } else {
+    element=document.createElement('img');
+  }
+  element.id='modalMainImage';
+  element.src=src;
+  element.style.borderRadius='8px';
+  element.addEventListener('click',()=>{
+    if(typeof media==='object' && media.link){
+      window.open(media.link,'_blank');
+    }
+  });
+  mainViewer.insertBefore(element, mainViewer.querySelector('.nav-arrows'));
+
+  modalMainImage=element;
+  [...modalThumbs.children].forEach((t,i)=>t.classList.toggle('active',i===index));
+  currentIndex=index;
+}
+
+prevImageBtn.addEventListener('click',()=>{ currentIndex=(currentIndex-1+currentGallery.length)%currentGallery.length; selectImage(currentIndex); });
+nextImageBtn.addEventListener('click',()=>{ currentIndex=(currentIndex+1)%currentGallery.length; selectImage(currentIndex); });
+modalClose.addEventListener('click',()=>modalBackdrop.classList.remove('open'));
+modalBackdrop.addEventListener('click',e=>{if(e.target===modalBackdrop)modalBackdrop.classList.remove('open');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')modalBackdrop.classList.remove('open');});
+
+unifiedSearch.addEventListener('input',()=>{
+  const val=unifiedSearch.value.toLowerCase();
+  const filtered=restaurants.filter(r=>
+    r.name.toLowerCase().includes(val)||
+    r.city.toLowerCase().includes(val)||
+    r.zip.includes(val)
+  );
+  renderGrid(filtered);
+});
+
+renderGrid(restaurants);
+
+// --- Navegación interna de la app ---
+document.getElementById("btn-back").addEventListener("click", () => {
+  window.history.back();
+});
+
+document.getElementById("btn-home").addEventListener("click", () => {
+  window.location.href = "index.html"; // o tu ruta principal
+});
+
+document.getElementById("btn-refresh").addEventListener("click", () => {
+  window.location.reload();
+});
+
+</script>
+<script src="https://menutech.xyz/menutechUI.min.js"></script>
+</body>
+</html>
