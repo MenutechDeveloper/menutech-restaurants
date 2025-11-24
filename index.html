@@ -12,7 +12,6 @@
     <link rel="icon" type="image/png" sizes="192x192" href="./assets/img/Diseño%20sin%20título%20(8).png">
     <link rel="icon" type="image/png" sizes="500x500" href="./assets/img/mks%20(9).png">
   <style>
-    /* ===== Estilos generales ===== */
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background: #1e1e1e;
@@ -24,15 +23,12 @@
       align-items: center;
       min-height: 100vh;
     }
-
     h1 {
       margin-top: 20px;
       color: #00bcd4;
       font-size: 1.8rem;
       text-shadow: 0 0 8px rgba(0, 188, 212, 0.4);
     }
-
-    /* ===== Barra de búsqueda ===== */
     .search-bar {
       width: 90%;
       max-width: 600px;
@@ -40,7 +36,6 @@
       display: flex;
       justify-content: center;
     }
-
     .search-bar input {
       width: 100%;
       padding: 10px 15px;
@@ -53,12 +48,9 @@
       box-shadow: 0 0 8px rgba(0,0,0,0.4);
       transition: 0.3s;
     }
-
     .search-bar input:focus {
       box-shadow: 0 0 10px #00bcd4;
     }
-
-    /* ===== Contenedor del grid ===== */
     .grid-container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -68,8 +60,6 @@
       margin: 20px auto;
       justify-items: center;
     }
-
-    /* ===== Ítems del grid ===== */
     .grid-item {
       width: 100%;
       background: #2a2a2a;
@@ -79,18 +69,15 @@
       transition: transform 0.3s, box-shadow 0.3s;
       text-align: center;
     }
-
     .grid-item:hover {
       transform: scale(1.05);
       box-shadow: 0 0 20px rgba(0, 188, 212, 0.5);
     }
-
     .grid-item a {
       display: block;
       color: inherit;
       text-decoration: none;
     }
-
     .grid-item img,
     .grid-item video {
       width: 100%;
@@ -98,21 +85,17 @@
       object-fit: cover;
       display: block;
     }
-
     .grid-item span {
       display: block;
       padding: 10px;
       font-size: 1rem;
       color: #ccc;
     }
-
-    /* ===== Responsive ===== */
     @media (max-width: 768px) {
       .grid-container {
-        grid-template-columns: repeat(3, 1fr); /* Mantener 3 columnas siempre */
+        grid-template-columns: repeat(3, 1fr);
       }
     }
-
     @media (max-width: 480px) {
       body {
         overflow-x: auto;
@@ -122,115 +105,482 @@
         gap: 15px;
       }
     }
+    .update-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+    }
+    .update-modal.hidden {
+      display: none;
+    }
+    .update-box {
+      background: #ffffff;
+      padding: 30px;
+      width: 380px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      animation: fadeIn 0.3s ease;
+    }
+    .update-box h2 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+    .progress-container {
+      margin-top: 15px;
+      width: 100%;
+    }
+    .progress-bar {
+      height: 12px;
+      background: #ff7a00;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.2s ease;
+    }
+    .update-btn {
+      margin-top: 20px;
+      background: #ff7a00;
+      color: #fff;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    .update-btn:hover {
+      background: #e86e00;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+
+/* ----------------- BASICS ----------------- */
+.hidden { opacity: 0; visibility: hidden; }
+
+
+/* Animaciones */
+.fade-in {
+  animation: fadeIn .25s forwards ease-out;
+}
+.fade-out {
+  animation: fadeOut .25s forwards ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-5px); }
+}
+
+/* ----------------- TOP BAR ----------------- */
+
+
+
+/* ICONO LOGIN */
+/* ICONO LOGIN (arriba izquierda con margen y tamaño) */
+#login-icon {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  width: 38px;
+  height: 38px;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: 0.25s;
+  z-index: 2000;
+}
+
+.login-icon:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+/* ----------------- LOGIN PANEL ----------------- */
+.login-panel {
+  position: absolute;
+  top: 55px;
+  left: 0px;
+  width: 260px;
+  padding: 20px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 12px;
+  color: white;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: 0.25s ease;
+}
+
+.login-panel.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.login-panel h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* INPUTS */
+.input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  box-sizing: border-box; /* <- Corrige el desbordamiento */
+}
+.input:focus {
+  outline: 2px solid #58a6ff;
+}
+
+/* BOTÓN LOGIN (Ahora naranja) */
+.login-btn {
+  margin-top: 18px;
+  width: 100%;
+  padding: 12px;
+  background: #ff8c00;     /* NARANJA corporativo */
+  border: none;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.25s;
+  text-align: center;
+   min-width: 120px;
+}
+.login-btn:hover {
+  background: #ffa733;       /* Naranja más claro */
+}
+
+/* Loader dentro del botón */
+.login-btn.loading {
+  pointer-events: none;
+  opacity: 0.7;
+  position: relative;
+   color: transparent;
+}
+
+.login-btn.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  margin-top: -9px;
+  border: 3px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* éxito */
+.login-btn.success {
+  background: #16c60c;
+}
+
+
+/* ----------------- USER BADGE ----------------- */
+.user-badge {
+  position: fixed;
+  top: 10px;          /* alineado verticalmente al ícono */
+  left: 65px;         /* aparece a la derecha (38px del ícono + margen) */
+  display: flex;
+  flex-direction: column;
+  padding: 8px 14px;
+  background: #161b22;
+  border-radius: 12px;
+  border: 1px solid #2d333b;
+  min-width: 150px;
+  opacity: 0;
+  transform: scale(0.92);
+  transition: 0.25s;
+
+  overflow: hidden;   /* ← IMPORTANTE: evita que el brillo se salga */
+  z-index: 2001;
+  cursor: pointer;
+}
+
+
+
+/* cuando aparece */
+.user-badge.expand {
+  opacity: 1 !important;
+  transform: scale(1);
+}
+
+/* Nombre (más grande) */
+#badge-username {
+  font-size: 15px;
+  font-weight: 600;
+  color: #e6edf3;
+}
+
+/* Role (más discreto) */
+#badge-role {
+  font-size: 12px;
+  color: #8b949e;
+  margin-top: -2px;
+}
+
+/* Brillo lento */
+.user-badge::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.1),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: badgeShine 4s linear infinite;
+  pointer-events: none;
+}
+
+
+@keyframes badgeShine {
+  0% { left: -120%; }
+  100% { left: 150%; }
+}
+
+/* ----------------- MENU DEL BADGE ----------------- */
+#badge-menu {
+    position: fixed;
+    top: 55px;
+    left: 65px;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+    transform: translateY(-5px);
+}
+
+
+#badge-menu.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+
+/* botón cerrar sesión */
+.logout-btn {
+  width: 100%;
+  background: #ff8c00;
+  padding: 10px;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+.logout-btn:hover {
+  background: #ffa733;
+}
+@keyframes vibrate {
+  0%   { transform: translate(0); }
+  20%  { transform: translate(-2px, 1px); }
+  40%  { transform: translate(3px, -2px); }
+  60%  { transform: translate(-3px, 2px); }
+  80%  { transform: translate(2px, -1px); }
+  100% { transform: translate(0); }
+}
+
+.vibrate-error {
+  animation: vibrate 0.15s linear 0s 3;
+}
+
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
+
+.shake-error {
+  animation: shake 0.35s ease;
+  border: 1px solid #ff4d4d !important;
+}
+
+/* Forzar que el shake se vea */
+#login-panel.shake-error {
+  animation: shake 0.35s ease-in-out !important;
+}
+
+/* Mensaje rojo */
+#login-status {
+  color: #ff4d4d;
+  font-weight: 600;
+  margin-top: 8px;
+}
+.login-btn.error {
+  background: #ff4d4d;
+}
+
   </style>
 </head>
 <body>
+<!-- ICONO Y BADGE (sin barra, con margen propio) -->
+<img id="login-icon" class="login-icon" src="./assets/img/user.svg">
+
+  <!-- Placa del usuario -->
+<div id="user-badge" class="user-badge hidden" style="position: fixed;">
+  <div id="badge-username"></div>
+  <div id="badge-role"></div>
+</div>
+
+<!-- Menú ahora fuera del badge -->
+<div id="badge-menu" class="hidden">
+  <button id="logout-btn" class="logout-btn">Cerrar sesión</button>
+</div>
+
+
+<!-- PANEL DE LOGIN -->
+<div id="login-panel" class="login-panel hidden">
+
+  <h3>Iniciar sesión</h3>
+
+  <input id="user" class="input" placeholder="Usuario">
+  <input id="pass" class="input" type="password" placeholder="Contraseña">
+
+  <button id="login-btn" class="login-btn">Entrar</button>
+
+  <!-- Estado del login -->
+  <div id="login-status" class="status"></div>
+</div>
+
+<!-- TU DRAWER -->
+<menutech-drawer id="main-drawer" class="hidden"></menutech-drawer>
+
+<script src="./assets/js/renderer.js"></script>
+
+
+
+
     <menutech-themes></menutech-themes>
     <menutech-chatbot></menutech-chatbot>
+
   <h1></br></h1>
 
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="filterGrid()">
   </div>
 
-  <div class="grid-container" id="gridContainer">
-    <!-- Los elementos se generan dinámicamente con JS -->
+  <div class="grid-container" id="gridContainer"></div>
+
+<div id="updateModal" class="update-modal hidden">
+  <div class="update-box">
+    <h2 id="updateTitle">Buscando actualizaciones…</h2>
+    <p id="updateMessage">Por favor espera...</p>
+    <div id="progressContainer" class="progress-container hidden">
+      <div id="progressBar" class="progress-bar"></div>
+      <span id="progressPercent">0%</span>
+    </div>
+    <button id="btnRestart" class="update-btn hidden">Reiniciar y actualizar</button>
   </div>
+</div>
 
-  <script>
-    // ===== Datos dinámicos del grid =====
-    const items = [
-      { type: "img", src: "./assets/dir1.jpg", link: "./directory.html", name: "Directorio" },
-      { type: "img", src: "./assets/forms.jpg", link: "./forms.html", name: "Formularios" },
-      { type: "img", src: "./assets/3cx.jpg", link: "3cx", name: "3cx" },
-      { type: "img", src: "./assets/gallery.jpg", link: "./gallery.html", name: "POS" },
-      { type: "img", src: "./assets/settings.jpg", link: "./settings.html", name: "Websites" },
-      { type: "video", src: "./assets/demo.mp4", link: "./demo.html", name: "Apps" },
-      { type: "img", src: "./assets/help.jpg", link: "./help.html", name: "Camisetas" },
-      { type: "img", src: "./assets/about.jpg", link: "./about.html", name: "Menus" },
-      { type: "img", src: "./assets/contact.jpg", link: "./contact.html", name: "Flyers" },
-      { type: "img", src: "./assets/help.jpg", link: "./help.html", name: "Plataforma Menutech" },
-      { type: "img", src: "./assets/about.jpg", link: "./about.html", name: "Logos" },
-      { type: "img", src: "./assets/contact.jpg", link: "./contact.html", name: "Tablets" }
-    ];
+<script>
+const items = [
+  { type: "img", src: "./assets/dir1.jpg", link: "./directory.html", name: "Directorio" },
+  { type: "img", src: "./assets/forms.jpg", link: "./forms.html", name: "Formularios" },
+  { type: "img", src: "./assets/3cx.jpg", link: "3cx", name: "3cx" },
+  { type: "img", src: "./assets/gallery.jpg", link: "https://menutech.biz/p40o7s/index.html", name: "POS" },
+  { type: "img", src: "./assets/settings.jpg", link: "https://menutech.biz/w111/website.html", name: "Websites" },
+  { type: "video", src: "./assets/demo.mp4", link: "https://menutech.biz/p104/phone.html", name: "Apps" },
+  { type: "img", src: "./assets/help.jpg", link: "https://menutech.biz/s04/shirt.html", name: "Camisetas" },
+  { type: "img", src: "./assets/about.jpg", link: "https://menutech.biz/m10/index.html", name: "Menus" },
+  { type: "img", src: "./assets/contact.jpg", link: "https://menutech.biz/f32/index.html", name: "Flyers" },
+  { type: "img", src: "./assets/help.jpg", link: "https://menutech.biz/pl555f9a/index.html", name: "Plataforma Menutech" },
+  { type: "img", src: "./assets/about.jpg", link: "#", name: "Logos" },
+  { type: "img", src: "./assets/contact.jpg", link: "#", name: "Tablets" }
+];
 
-    // ===== Generar el grid dinámicamente =====
-    const container = document.getElementById('gridContainer');
+const container = document.getElementById('gridContainer');
+items.forEach(item => {
+  const div = document.createElement('div');
+  div.className = 'grid-item';
+  div.setAttribute('data-name', item.name.toLowerCase());
+  const a = document.createElement('a');
+  a.href = item.link;
+  if (item.type === "img") {
+    const img = document.createElement('img');
+    img.src = item.src;
+    img.alt = item.name;
+    a.appendChild(img);
+  } else if (item.type === "video") {
+    const video = document.createElement('video');
+    video.src = item.src;
+    video.autoplay = true;
+    video.loop = true;
+    video.muted = true;
+    a.appendChild(video);
+  }
+  const label = document.createElement('span');
+  label.textContent = item.name;
+  a.appendChild(label);
+  div.appendChild(a);
+  container.appendChild(div);
+});
 
-    items.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'grid-item';
-      div.setAttribute('data-name', item.name.toLowerCase());
+function filterGrid() {
+  const searchValue = document.getElementById('searchInput').value.toLowerCase();
+  const items = document.querySelectorAll('.grid-item');
+  items.forEach(item => {
+    const name = item.getAttribute('data-name');
+    item.style.display = name.includes(searchValue) ? '' : 'none';
+  });
+}
 
-      const a = document.createElement('a');
-      a.href = item.link;
-
-      if (item.type === "img") {
-        const img = document.createElement('img');
-        img.src = item.src;
-        img.alt = item.name;
-        a.appendChild(img);
-      } else if (item.type === "video") {
-        const video = document.createElement('video');
-        video.src = item.src;
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true;
-        a.appendChild(video);
-      }
-
-      const label = document.createElement('span');
-      label.textContent = item.name;
-
-      a.appendChild(label);
-      div.appendChild(a);
-      container.appendChild(div);
-    });
-
-    // ===== Función del buscador =====
-    function filterGrid() {
-      const searchValue = document.getElementById('searchInput').value.toLowerCase();
-      const items = document.querySelectorAll('.grid-item');
-
-      items.forEach(item => {
-        const name = item.getAttribute('data-name');
-        item.style.display = name.includes(searchValue) ? '' : 'none';
-      });
-    }
-    
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-  // Añadir clase visible al cargar normalmente
+document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('visible');
-
-  // Agregar evento click a todos los links
   document.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', function(e) {
-      // Ignorar si:
-      // - Abre en nueva pestaña
-      // - Se usa ctrl/cmd click
-      // - Tiene download
-      if (
-        this.target === "_blank" ||
-        e.metaKey || e.ctrlKey || e.shiftKey || e.altKey ||
-        this.hasAttribute('download')
-      ) {
+      if (this.target === "_blank" ||
+          e.metaKey || e.ctrlKey || e.shiftKey || e.altKey ||
+          this.hasAttribute('download')) {
         return;
       }
-
-      // Ignorar anclas internas (por ejemplo, href="#seccion")
       if (this.href.startsWith(window.location.href.split('#')[0] + '#')) {
         return;
       }
-
       e.preventDefault();
       const href = this.href;
-
-      // Quitar clase visible (fade-out)
       document.body.classList.remove('visible');
-
-      // Esperar transición y redirigir
       setTimeout(() => {
         window.location.href = href;
       }, 500);
@@ -238,16 +588,56 @@
   });
 });
 
-// Evento pageshow para restaurar cuando se vuelve con "atrás"
 window.addEventListener('pageshow', (event) => {
   document.body.classList.add('visible');
 });
-  </script>
-  
 
+const modal = document.getElementById('updateModal');
+const title = document.getElementById('updateTitle');
+const message = document.getElementById('updateMessage');
+const progressContainer = document.getElementById('progressContainer');
+const progressBar = document.getElementById('progressBar');
+const progressPercent = document.getElementById('progressPercent');
+const btnRestart = document.getElementById('btnRestart');
 
-    
-    
-  <script src="https://menutechdeveloper.github.io/libreria/menutechlibrary.js"></script>
+function showModal() {
+  modal.classList.remove('hidden');
+}
+
+window.api?.receive?.("update_available", () => {
+  showModal();
+  title.textContent = "Actualización disponible";
+  message.textContent = "Comenzando la descarga...";
+});
+
+window.api?.receive?.("update_download_progress", (data) => {
+  showModal();
+  progressContainer.classList.remove("hidden");
+  progressBar.style.width = `${Math.round(data.percent)}%`;
+  progressPercent.textContent = `${Math.round(data.percent)}%`;
+  title.textContent = "Descargando actualización…";
+  message.textContent = `Descargando (${Math.round(data.percent)}%)`;
+});
+
+window.api?.receive?.("update_downloaded", () => {
+  showModal();
+  title.textContent = "Actualización lista";
+  message.textContent = "La actualización está lista para instalarse.";
+  progressContainer.classList.add("hidden");
+  btnRestart.classList.remove("hidden");
+});
+
+window.api?.receive?.("update_error", (err) => {
+  showModal();
+  title.textContent = "Error en la actualización";
+  message.textContent = err;
+});
+
+btnRestart.addEventListener("click", () => {
+  window.api?.send?.("install_update_now");
+});
+</script>
+
+<script src="https://menutech.xyz/menutechUI.min.js"></script>
 </body>
 </html>
